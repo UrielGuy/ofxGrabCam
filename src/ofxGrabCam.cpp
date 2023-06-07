@@ -367,10 +367,10 @@ void ofxGrabCam::mouseDragged(ofMouseEventArgs & args) {
 			action = Action::Orbit;
 			break;
 		case 1:
-			action = Action::Pan;
+			action = Action::Dolly;
 			break;
 		case 2:
-			action = Action::Dolly;
+			action = Action::Pan;
 			break;
 		default:
 			break;
@@ -435,6 +435,14 @@ void ofxGrabCam::mouseDragged(ofMouseEventArgs & args) {
 	}
 }
 
+void ofxGrabCam::mouseScrolled(ofMouseEventArgs& args) {
+	if (!this->userSettings.mouseActionsEnabled) {
+		return;
+	}
+	const auto cameraToMouse = this->tracking.mouse.world - ofCamera::getPosition();
+	ofCamera::move(30 * cameraToMouse * args.scrollY / this->view.viewport.getHeight());
+}
+
 //--------------------------
 void ofxGrabCam::keyPressed(ofKeyEventArgs & args) {
 	if (args.key == 'r') {
@@ -477,6 +485,7 @@ void ofxGrabCam::addListeners() {
 	ofAddListener(ofEvents().mousePressed, this, &ofxGrabCam::mousePressed);
 	ofAddListener(ofEvents().mouseReleased, this, &ofxGrabCam::mouseReleased);
 	ofAddListener(ofEvents().mouseDragged, this, &ofxGrabCam::mouseDragged);
+	ofAddListener(ofEvents().mouseScrolled, this, &ofxGrabCam::mouseScrolled);
 	ofAddListener(ofEvents().keyPressed, this, &ofxGrabCam::keyPressed);
 	ofAddListener(ofEvents().keyReleased, this, &ofxGrabCam::keyReleased);
 
@@ -491,6 +500,7 @@ void ofxGrabCam::removeListeners() {
 		ofRemoveListener(ofEvents().mousePressed, this, &ofxGrabCam::mousePressed);
 		ofRemoveListener(ofEvents().mouseReleased, this, &ofxGrabCam::mouseReleased);
 		ofRemoveListener(ofEvents().mouseDragged, this, &ofxGrabCam::mouseDragged);
+		ofRemoveListener(ofEvents().mouseScrolled, this, &ofxGrabCam::mouseScrolled);
 		ofRemoveListener(ofEvents().keyPressed, this, &ofxGrabCam::keyPressed);
 		ofRemoveListener(ofEvents().keyReleased, this, &ofxGrabCam::keyReleased);
 
