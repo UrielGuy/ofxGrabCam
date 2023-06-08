@@ -9,6 +9,7 @@
 #include "ofxGrabCam.h"
 #include "of3dGraphics.h"
 
+#undef None
 #define OFXGRABCAM_SEARCH_WIDTH_PX 8
 #define OFXGRABCAM_RESET_HOLD_MS 500
 
